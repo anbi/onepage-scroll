@@ -205,7 +205,9 @@
         pos = ((page_index - 1) * 100) * -1;
 
         if (history.replaceState && settings.updateURL == true) {
-            var href = window.location.href.substr(0,window.location.href.indexOf('#')) + "#" + (page_index - 1);
+            var title = $('section:eq('+(page_index-1)+')').attr('title');
+            var slug = (title) ? title.toLowerCase().replace(/ /g,'-') : (page_index);
+            var href = window.location.href.substr(0,window.location.href.indexOf('#')) + "#" +  slug;
             history.pushState( {}, document.title, href );
         }
         el.transformPage(settings, pos, page_index);
@@ -281,7 +283,7 @@
     // Prepare everything before binding wheel scroll
 
     el.addClass("onepage-wrapper").css("position","relative");
-    $.each( sections, function(i) {
+    $.each( sections, function(i,e) {
       $(this).css({
         position: "absolute",
         top: topPos + "%"
@@ -305,7 +307,9 @@
 
 
       if(settings.pagination == true) {
-        paginationList += "<li><a data-index='"+(i+1)+"' href='#" + (i+1) + "'></a></li>"
+        var slug  = (e.title) ? e.title.toLowerCase().replace(/ /g,'-') : (i+1);
+        var title = (e.title) ? "title='"+e.title+"'" : "";
+        paginationList += "<li><a data-index='"+(i+1)+"' href='#" + slug + "' "+title+"></a></li>"
       }
     });
 
