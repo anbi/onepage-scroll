@@ -28,13 +28,13 @@
     loop: true,
     responsiveFallback: false,
     direction : 'vertical'
-  };
+	};
 
-  /*------------------------------------------------*/
-  /*  Credit: Eike Send for the awesome swipe event */
-  /*------------------------------------------------*/
+	/*------------------------------------------------*/
+	/*  Credit: Eike Send for the awesome swipe event */
+	/*------------------------------------------------*/
 
-  $.fn.swipeEvents = function() {
+	$.fn.swipeEvents = function() {
       return this.each(function() {
 
         var startX,
@@ -96,8 +96,8 @@
       if (typeof settings.beforeMove == 'function') settings.beforeMove(index);
 
       // Just a simple edit that makes use of modernizr to detect an IE8 browser and changes the transform method into
-      // an top animate so IE8 users can also use this script.
-      if($('html').hasClass('ie8')){
+    	// an top animate so IE8 users can also use this script.
+    	if($('html').hasClass('ie8')){
         if (settings.direction == 'horizontal') {
           var toppos = (el.width()/100)*pos;
           $(this).animate({left: toppos+'px'},settings.animationTime);
@@ -105,9 +105,9 @@
           var toppos = (el.height()/100)*pos;
           $(this).animate({top: toppos+'px'},settings.animationTime);
         }
-      } else{
-        $(this).css({
-          "-webkit-transform": ( settings.direction == 'horizontal' ) ? "translate3d(" + pos + "%, 0, 0)" : "translate3d(0, " + pos + "%, 0)",
+    	} else{
+    	  $(this).css({
+    	    "-webkit-transform": ( settings.direction == 'horizontal' ) ? "translate3d(" + pos + "%, 0, 0)" : "translate3d(0, " + pos + "%, 0)",
          "-webkit-transition": "all " + settings.animationTime + "ms " + settings.easing,
          "-moz-transform": ( settings.direction == 'horizontal' ) ? "translate3d(" + pos + "%, 0, 0)" : "translate3d(0, " + pos + "%, 0)",
          "-moz-transition": "all " + settings.animationTime + "ms " + settings.easing,
@@ -115,8 +115,8 @@
          "-ms-transition": "all " + settings.animationTime + "ms " + settings.easing,
          "transform": ( settings.direction == 'horizontal' ) ? "translate3d(" + pos + "%, 0, 0)" : "translate3d(0, " + pos + "%, 0)",
          "transition": "all " + settings.animationTime + "ms " + settings.easing
-        });
-      }
+    	  });
+    	}
       $(this).one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function(e) {
         if (typeof settings.afterMove == 'function') settings.afterMove(index);
       });
@@ -205,7 +205,9 @@
         pos = ((page_index - 1) * 100) * -1;
 
         if (history.replaceState && settings.updateURL == true) {
-            var href = window.location.href.substr(0,window.location.href.indexOf('#')) + "#" + (page_index - 1);
+            var title = $('section:eq('+(page_index-1)+')').attr('title');
+            var slug = (title) ? title.toLowerCase().replace(/ /g,'-') : (page_index);
+            var href = window.location.href.substr(0,window.location.href.indexOf('#')) + "#" +  slug;
             history.pushState( {}, document.title, href );
         }
         el.transformPage(settings, pos, page_index);
@@ -218,18 +220,18 @@
       var typeOfRF = typeof settings.responsiveFallback
 
       if(typeOfRF == "number"){
-        valForTest = $(window).width() < settings.responsiveFallback;
+      	valForTest = $(window).width() < settings.responsiveFallback;
       }
       if(typeOfRF == "boolean"){
-        valForTest = settings.responsiveFallback;
+      	valForTest = settings.responsiveFallback;
       }
       if(typeOfRF == "function"){
-        valFunction = settings.responsiveFallback();
-        valForTest = valFunction;
-        typeOFv = typeof valForTest;
-        if(typeOFv == "number"){
-          valForTest = $(window).width() < valFunction;
-        }
+      	valFunction = settings.responsiveFallback();
+      	valForTest = valFunction;
+      	typeOFv = typeof valForTest;
+      	if(typeOFv == "number"){
+      		valForTest = $(window).width() < valFunction;
+      	}
       }
 
       //end modification
@@ -281,7 +283,7 @@
     // Prepare everything before binding wheel scroll
 
     el.addClass("onepage-wrapper").css("position","relative");
-    $.each( sections, function(i) {
+    $.each( sections, function(i,e) {
       $(this).css({
         position: "absolute",
         top: topPos + "%"
@@ -305,7 +307,9 @@
 
 
       if(settings.pagination == true) {
-        paginationList += "<li><a data-index='"+(i+1)+"' href='#" + (i+1) + "'></a></li>"
+        var slug  = (e.title) ? e.title.toLowerCase().replace(/ /g,'-') : (i+1);
+        var title = (e.title) ? "title='"+e.title+"'" : "";
+        paginationList += "<li><a data-index='"+(i+1)+"' href='#" + slug + "' "+title+"></a></li>"
       }
     });
 
